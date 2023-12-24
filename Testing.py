@@ -3,6 +3,7 @@ from Formula import Formula
 This a testing file for the Formula class.
 It reads a file with formulas and calculates the heaviest, lightest, most atoms, least atoms, average mass and average number of C-atoms.
 It prints the formula and the mass of said formulas.
+To run the test file please update the file path to the correct path on your computer.
 '''
 
 file_path = r"C:\Daten\ChemInfo\datalab23\Exercises\hs23_datalab_formulae.txt"
