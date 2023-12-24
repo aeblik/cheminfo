@@ -38,6 +38,28 @@ from Atom import Atom, info
 from Formula import Formula, atomicNumber
 
 class Molecule:
+    '''
+    This class represents a molecule.
+
+    Attributes:
+    mol (dict): A dictionary representing the molecule. Each key is an atom index, and each value is a tuple containing an Atom object and a dictionary of its bonds.
+    atom (list): A list of Atom objects representing the atoms in the molecule.
+    edges (list): A list of tuples representing the bonds in the molecule. Each tuple contains two atom indices and a bond type.
+
+    Methods:
+    order(): Returns the number of atoms in the molecule.
+    size(): Returns the number of bonds in the molecule.
+    degree(node): Returns the number of bonds connected to the given atom.
+    isIsolate(node): Returns True if the given atom is not connected to any other atoms, False otherwise.
+    isTerminal(node): Returns True if the given atom is connected to exactly one other atom, False otherwise.
+    mass(): Returns the total mass of the molecule.
+    exactMass(): Returns the exact mass of the molecule.
+    formula(): Returns the chemical formula of the molecule as a string.
+    hasElement(element): Returns True if the molecule contains the given element, False otherwise.
+    isElement(element): Returns True if all atoms in the molecule are of the given element, False otherwise.
+    isSubstructure(other): Returns True if the molecule is a substructure of the other molecule, False otherwise.
+    isSubgraph(other): Returns True if the molecule is a subgraph of the other molecule, False otherwise.
+    '''
     def __init__(self, atoms, edges):
         self.mol = {}
         self.atom = atoms
@@ -221,6 +243,9 @@ test = Molecule([Atom("C",3),Atom("C",2),Atom("O",1)],[(0,1,1),(1,2,1)])
 #    determines if the two nodes are connected.
 
 def isPath(molecule, node1, node2, visited=None):
+    '''
+    Returns True if there is a path between node1 and node2, False otherwise.
+    Takes a molecule, two nodes, and an optional list of visited nodes as input.'''
     if visited is None:
         visited = []
     if node1 == node2:
@@ -244,6 +269,9 @@ def isPath(molecule, node1, node2, visited=None):
 #    connected, the empty list should be returned.
 
 def findPath(molecule, node1, node2, visited=None):
+    '''
+    Returns a list of node indices in the path between node1 and node2.
+    Takes a molecule, two nodes, and an optional list of visited nodes as input.'''
     if visited is None:
         visited = []
     if node1 == node2:
@@ -258,7 +286,7 @@ def findPath(molecule, node1, node2, visited=None):
     return []
 
 
-print(findPath(test, 0, 2))
+# print(findPath(test, 0, 2))
 
 #
 # l) Even if you haven't finished everything, you might want to test
@@ -317,4 +345,4 @@ print(tyrosineHCl.isTerminal(4))
 print(tyrosineHCl.isTerminal(12))
 print(tyrosineHCl.isIsolate(13))
 print(tyrosineHCl.isIsolate(0))
-print(findPath(tyrosineHCl, 0, 13))
+print(findPath(tyrosineHCl, 0, 12))

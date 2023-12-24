@@ -29,6 +29,18 @@ fromSymbol = {element['symbol']: index for index, element in enumerate(info)}
 #      The constructor should also raise an exception if the sum of
 #      implicit hydrogens and charge is greater than 4.
 class Atom:
+    '''
+    This class represents an atom in a molecule.
+
+    Attributes:
+    element (int): The atomic number of the atom.
+    hydrogens (int): The number of hydrogen atoms bonded to this atom. Default is 0.
+    charge (int): The charge of the atom. Default is 0.
+
+    Raises:
+    ValueError: If the atomic number is less than 1.
+    ValueError: If the sum of the number of hydrogen atoms and the charge is greater than 4.
+    '''
     def __init__(self, element, hydrogens=0, charge=0):
         if element < 1:
             raise ValueError('Atomic number must be a positive integer')
@@ -43,6 +55,10 @@ class Atom:
 
 
 def symbol(self):
+    '''
+    Returns the symbol of the atom's element.
+
+    '''
     return info[self.element]['symbol']
 Atom.symbol = symbol
 
@@ -50,6 +66,9 @@ Atom.symbol = symbol
 #      atomic mass. Make sure to include the mass from implicit hydrogen
 #      atoms. Do the same thing for `exactMass`.
 def mass(self):
+    '''
+    Returns the mass of the atom.
+    '''
     return info[self.element]['mass'] + self.hydrogens * info[1]['mass']
 Atom.mass = mass
 def exactMass(self):
@@ -77,6 +96,9 @@ Atom.exactMass = exactMass
 #        print(Atom(6,2,1))
 #        >>> CH2+
 def __str__(self):
+    '''
+    Returns a string representation of the atom.
+    '''
     return self.symbol() + ('H'+ str(self.hydrogens) if self.hydrogens >0 else '') + str(self.charge if self.charge not in(0, 1) else '') + ('+' if self.charge > 0 else '')
 Atom.__str__ = __str__
 
@@ -90,6 +112,9 @@ Atom.__str__ = __str__
 #      instead of the atomic number, we can also provide an element symbol.
 #      You need to perform some runtime type checking for this to work.
 def __init__(self, element, hydrogens=0, charge=0):
+    '''
+    Initializes an Atom object.
+    '''
     if isinstance(element, str):
         element = fromSymbol[element]
     if element < 1:

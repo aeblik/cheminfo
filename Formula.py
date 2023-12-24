@@ -25,6 +25,11 @@ from Atom import fromSymbol
 #    as an element symbol and returned.
 
 def symbol(element):
+    ''' 
+    This function takes in an argument and returns the corresponding element.
+    If the input is an atomic number it is converted to the element and returned. 
+    If the input is an element it is returned.
+    '''
     return info[element]['symbol'] if isinstance(element, int) else fromSymbol[element]
 
 #
@@ -33,7 +38,11 @@ def symbol(element):
 #    be treated as an atomic number and returned, else it should be treated
 #    as an element symbol and converted.
 
-def atomicNumber(element):  
+def atomicNumber(element):
+    '''
+    This function returns the atomic number of its argument.
+    If the input is an atomic number / integer it is returned.
+    If the input is an element it is converted to the atomic number and returned.'''  
     return element if isinstance(element, int) else fromSymbol[element]
 
 # c) Implement a function `addElement` taking three arguments:
@@ -54,6 +63,18 @@ def atomicNumber(element):
 #    to convert `element` to an atomic number first!
 
 def addElement(formula, element, count):
+    '''
+    This function takes three arguments - formula, element and count.
+    Formula must be a dictionary mapping atomic numbers to counts.
+    Element must be an element symbol (string) or an atomic number (integer).
+    Count must be an integer and represents the number of atoms of the given element
+    that should be inserted into the formula.
+    If the count is negative the function does nothing.
+    The element is converted to an atomic number. 
+    If the element is already in the formula dictionary the count is added to the
+    corresponding element. 
+    If the element is not in the formula dictionary it is inserted to it with its count.
+    '''
     if count < 0:
         return
     element = atomicNumber(element)
@@ -77,6 +98,14 @@ def addElement(formula, element, count):
 #      >>> {6: 2, 1: 6, 8: 1}
 
 def formulaFromList(pairs):
+    '''
+    This function takes a list of element-count pairs as an argument
+    and converts it to a dictionary again mapping atomic numbers to counts.
+    The input list can contain element symbols (strings) or atomic numbers(integers)
+    The counts must be integers.
+    A single element in the input list can be listed multiple times.
+    The output will contain an aggregated count of multiple listed elements.
+    '''
     formula = {}
     for element, count in pairs:
         addElement(formula, element, count)
@@ -98,6 +127,13 @@ def formulaFromList(pairs):
 #    testing.
 
 def element(pos, string):
+    '''
+    This function takes a position and a string as arguments.
+    The position is the position of the first character of an element in the string.
+    The function returns the position of the first character of the next element
+    and the atomic number of the element.
+    If the element is not found the function returns the position and 0.
+    '''
     if pos < len(string)-1 and string[pos+1].islower():
         return pos+2, atomicNumber(string[pos:pos+2])
     elif string[pos].isupper():
@@ -107,6 +143,15 @@ def element(pos, string):
 
 
 def counter(pos, string):
+    '''
+    This function takes a position and a string as arguments.
+    The position is the position of the first character of a number in the string.
+    The function returns the position of the first character after the number
+    and the count of the element.
+    If the number is not found the function returns the position and 1. 
+    Hence an element in the input can NOT be followed by a number 0.
+    For example C0 is not a good input since the parser will count the C as 1.
+    '''
     count = 0
     i = 0
     while pos + i < len(string)-1:
@@ -122,6 +167,11 @@ def counter(pos, string):
 
     
 def parseFormula(string):
+    '''
+    This function takes a string as an argument and returns a dictionary
+    mapping atomic numbers to counts.
+    The string must be a valid molecular formula. Element symbols should not be followed by 0.
+    '''
     formula = {}
     pos = 0
     while pos < len(string):
@@ -139,6 +189,13 @@ def parseFormula(string):
 #    dictionary.
 
 def numAtoms(formula, element):
+    '''
+    This function takes a formula and an element as arguments.
+    The formula must be a dictionary mapping atomic numbers to counts.
+    The element can be an element symbol (string) or an atomic number (integer).
+    The function returns the number of atoms of the given element in the formula.
+    If the element is not in the formula the function returns 0.
+    '''
     return formula[atomicNumber(element)] if atomicNumber(element) in formula else 0
 
 
@@ -158,6 +215,12 @@ def numAtoms(formula, element):
 #      >>> 'C3'
 
 def printPair(element, count):
+    '''
+    This function takes an element and a count as arguments.
+    The element can be an element symbol (string) or an atomic number (integer).
+    The count must be an integer.
+    The function returns a string representing the given element-count pair.
+    '''
     element = atomicNumber(element)
     if count == 1:
         return symbol(element)
@@ -172,6 +235,11 @@ def printPair(element, count):
 #    everything before assembling the string, and use `printPair`
 #    in your implementation.
 def printFormula(formula):
+    '''
+    This function takes a formula as an argument.
+    The formula must be a dictionary mapping atomic numbers to counts.
+    The function returns a string representing the formula in Hill order.
+    '''
     formula = {symbol(number): count for number, count in formula.items()}
     result = ''
     if 'C' in formula:
@@ -200,6 +268,30 @@ def printFormula(formula):
 #    >>> C2H6O
 
 class Formula:
+    '''
+    This class represents a molecular formula.
+
+    Attributes:
+    __formula: A dictionary representing the molecular formula.
+
+    Methods:
+    __init__(formula): Initializes the Formula object with a formula.
+    __str__(): Returns a string representation of the formula.
+    __repr__(): Returns a string representation of the formula.
+    __getitem__(element): Returns the count of the given element in the formula.
+    __contains__(element): Checks if the given element is in the formula.
+    __add__(other): Adds another formula or dictionary to the formula.
+    __sub__(other): Subtracts another formula or dictionary from the formula.
+    __eq__(other): Checks if the formula is equal to another formula.
+    __ne__(other): Checks if the formula is not equal to another formula.
+    mass(): Returns the mass of the formula.
+    exactMass(): Returns the exact mass of the formula.
+    numAtoms(element): Returns the number of atoms of the given element in the formula.
+    hasElement(element): Checks if the given element is in the formula.
+    containsFormula(other): Checks if the formula contains another formula.
+    addFormula(other): Adds another formula to the formula.
+    get_formula(): Returns the formula dictionary.
+    '''
     def __init__(self, formula):
         self.__formula = parseFormula(formula) if isinstance(formula, str) else formula
     def __str__(self):
@@ -252,6 +344,8 @@ class Formula:
         for element, count in other.items():
             addElement(self.__formula, element, count)
         return self
+    def get_formula(self):
+        return self.__formula
     
 
 
